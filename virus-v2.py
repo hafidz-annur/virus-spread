@@ -88,7 +88,7 @@ class Simulation:
 
         # Add the map, image and statistics
         self.ax = self.fig.add_subplot(self.grid[0:, 40:])
-        self.img = mpimg.imread('img/map.png')
+        self.img = mpimg.imread('v1/img/map.png')
         self.ax.imshow(
             self.img,
             extent=[0, self.map_size, 0, self.map_size],

@@ -7,6 +7,7 @@ import matplotlib.image as image
 import matplotlib.widgets as widgets
 import matplotlib.patches as mpatches
 import os
+# print(os.listdir())
 
 
 class Simulation:
@@ -17,7 +18,7 @@ class Simulation:
         threshold: np.float64 = 2.0,
         map_size: np.float64 = 100,
         hospital_beds_ratio: float = .003,
-        infection_time: np.uint64 = 20,
+        infection_time: np.uint64 = 14,
         p_infect: float = 0.3,
         p_recover: float = 0.7
     ):
@@ -59,7 +60,7 @@ class Simulation:
         self.fig = plt.figure(figsize=(16, 9))
 
         self.fig.legend(handles=[
-            mpatches.Patch(color='skyblue', label='Healthy'),
+            mpatches.Patch(color='blue', label='Healthy'),
             mpatches.Patch(color='orangered', label='Infected'),
             mpatches.Patch(color='lime', label='Recovered'),
             mpatches.Patch(color='black', label='Deceased'),
@@ -71,9 +72,9 @@ class Simulation:
 
         self.grid = self.fig.add_gridspec(nrows=3, ncols=4)
         self.ax = self.fig.add_subplot(self.grid[0:, 1:])
-        # print(os.listdir())
+
         self.ax.imshow(
-            image.imread('img/map.png'),
+            image.imread('v1/img/map.png'),
             extent=[0, self.map_size, 0, self.map_size],
             aspect='auto')
 
@@ -116,7 +117,6 @@ class Simulation:
 
         self.positions += move
         self.positions = np.clip(self.positions, 0.0, self.map_size)
-        # print(self.positions)
 
     def find_p_at_risk(self):
         distVectors: np.ndarray = self.positions - \
@@ -145,11 +145,10 @@ class Simulation:
             infection_done, self.p_recover) > 0] = self.health_code['recovered']
 
         self.infected_duration[infection_done] = 0
-        # print(self.infected_duration)
 
     def health_colors(self):
         color = np.vectorize({
-            self.health_code['healthy']: 'skyblue',
+            self.health_code['healthy']: 'blue',
             self.health_code['infected']: 'orangered',
             self.health_code['recovered']: 'lime',
             self.health_code['deceased']: 'black',
@@ -217,4 +216,3 @@ class Simulation:
 
 sim = Simulation()
 plt.show()
-# sim.health_colors()
