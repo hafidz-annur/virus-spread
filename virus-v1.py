@@ -74,7 +74,7 @@ class Simulation:
         self.ax = self.fig.add_subplot(self.grid[0:, 1:])
 
         self.ax.imshow(
-            image.imread('v1/img/map.png'),
+            image.imread('img/map.png'),
             extent=[0, self.map_size, 0, self.map_size],
             aspect='auto')
 
