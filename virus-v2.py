@@ -16,6 +16,8 @@ import matplotlib.lines as mlines
 class Simulation:
     def __init__(
         self,
+        # You can change parameters,
+        # population size, initial case, threshold, infection time
         pop_size: int = 5000,
         init_case: int = 1,
         threshold: np.float64 = 2.0,
@@ -83,16 +85,17 @@ class Simulation:
                                                markersize=15, label='All-In Eduspace')
                                  ], loc='upper center')
 
-        # Add a grid for layout
         self.grid = self.fig.add_gridspec(nrows=80, ncols=100)
-
-        # Add the map, image and statistics
         self.ax = self.fig.add_subplot(self.grid[0:, 40:])
+
+        # you can change the map image here
+        # according to your image file ('img/your_file.png')
         self.img = mpimg.imread('img/map.png')
         self.ax.imshow(
             self.img,
             extent=[0, self.map_size, 0, self.map_size],
             aspect='auto')
+
         self.stats_ax = self.fig.add_subplot(self.grid[0:12, 0:35])
         self.case_ax = self.fig.add_subplot(self.grid[22:33, 0:35])
         self.recovered_ax = self.fig.add_subplot(self.grid[42:55, 0:13])
@@ -110,13 +113,11 @@ class Simulation:
         self.deceased_ax.set_xlabel('Time')
         self.deceased_ax.set_ylabel('Deceased')
 
-        # Call for updates
         self.ani = animation.FuncAnimation(
             self.fig, self.update_map, init_func=self.init_map)
         self.stats_ani = animation.FuncAnimation(
             self.fig, self.update_stats)
 
-        # Check buttons and simulation options
         self.paused: bool = False
         self.log_scale: bool = False
         self.p_movement: float = 1.0
@@ -129,6 +130,7 @@ class Simulation:
 
         self.checks.on_clicked(self.checkbox_handler)
 
+    # update location function is used to move each person
     def update_location(self, step_mean: np.float64 = 2.0):
         move = np.random.normal(
             scale=np.sqrt(step_mean/2),
@@ -144,6 +146,7 @@ class Simulation:
         self.positions += move
         self.positions = np.clip(self.positions, 0.0, self.map_size)
 
+    # find people who are at risk of catching the virus
     def find_p_at_risk(self):
         # Compute the distance between everyone
         distVectors: np.ndarray = self.positions - \
@@ -161,6 +164,7 @@ class Simulation:
         ppl_at_risk = np.sum(possibilityMat, axis=1)
         return ppl_at_risk
 
+    # this function is used to update the health status of each person
     def update_status(self):
         # Compute who becomes infected at the current time
         self.health[np.random.binomial(
@@ -180,6 +184,7 @@ class Simulation:
         # If they are recovered or deceased, we don't want to reroll their status
         self.infected_duration[infection_done] = 0
 
+    # this function is used to color each health status
     def health_colors(self):
         color = np.vectorize({
             self.health_code['healthy']: 'blue',

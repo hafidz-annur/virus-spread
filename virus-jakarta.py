@@ -78,7 +78,7 @@ class Simulation:
         # you can change the map image here
         # according to your image file
         self.ax.imshow(
-            image.imread('img/map.png'),
+            image.imread('img/jakarta.png'),
             extent=[0, self.map_size, 0, self.map_size],
             aspect='auto')
 
