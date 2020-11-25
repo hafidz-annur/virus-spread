@@ -13,7 +13,7 @@ import os
 class Simulation:
     def __init__(
         self,
-        pop_size: int = 5000,
+        pop_size: int = 3000,
         init_case: int = 1,
         threshold: np.float64 = 2.0,
         map_size: np.float64 = 100,
